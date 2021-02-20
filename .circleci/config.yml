@@ -68,6 +68,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: composer install
+          command: composer install -n --prefer-dist
+      - run:
           name: create config cache
           command: php ./server/laravel/artisan config:cache
 
