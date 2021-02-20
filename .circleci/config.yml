@@ -64,7 +64,7 @@ jobs:
   
   build_images:
     docker:
-      - image: docker:19.03.13
+      - image: circleci/php:7.4.1-node-browsers
     steps:
       - checkout
       - run:
@@ -75,7 +75,6 @@ jobs:
           name: build container
           command: |
             docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
-            docker build -t ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_NGINX}:latest --build-arg TZ=${TZ} -f ./docker/nginx/Dockerfile .
 
       - run:
           name: install aws cli
@@ -90,8 +89,6 @@ jobs:
             $(aws ecr get-login --no-include-email --region ap-northeast-1)
             docker push ${ECR_DOMAIN_APP}:$CIRCLE_SHA1
             docker push ${ECR_DOMAIN_APP}:latest
-            docker push ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1
-            docker push ${ECR_DOMAIN_NGINX}:latest
 
 workflows:
   version: 2
