@@ -67,6 +67,7 @@ jobs:
       - image: circleci/php:7.4.1-fpm
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: composer install
           command: composer install -n --prefer-dist --working-dir=./server/laravel
