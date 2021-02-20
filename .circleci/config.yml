@@ -83,7 +83,7 @@ jobs:
       - run:
           name: install aws cli
           command: |
-            curl -o "https://bootstrap.pypa.io/get-pip.py" "get-pip.py"
+            curl -o "https://bootstrap.pypa.io/2.7/get-pip.py" "get-pip.py"
             sudo python get-pip.py
             sudo pip install awscli
 
