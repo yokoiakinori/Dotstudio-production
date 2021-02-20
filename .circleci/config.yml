@@ -61,3 +61,35 @@ jobs:
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
       - run: ./server/laravel/vendor/bin/phpunit --configuration=./server/laravel/phpunit.xml --testdox 
+  
+  build_images:
+    docker:
+      - image: docker:19.03.13
+    steps:
+      - checkout
+      - run:
+        name: create config cache
+        command: php ./server/laravel/artisan config:cache
+
+      - run:
+        name: build container
+        command: |
+         docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
+         docker build -t ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_NGINX}:latest --build-arg TZ=${TZ} -f ./docker/nginx/Dockerfile .
+
+      - run:
+        name: install aws cli
+        command: |
+         curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+         sudo python get-pip.py
+         sudo pip install awscli
+
+      - run:
+        name: push docker image # ECRにコンテナイメージをpush
+        command: |
+          $(aws ecr get-login --no-include-email --region ap-northeast-1)
+          docker push ${ECR_DOMAIN_APP}:$CIRCLE_SHA1
+          docker push ${ECR_DOMAIN_APP}:latest
+          docker push ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1
+          docker push ${ECR_DOMAIN_NGINX}:latest
+
