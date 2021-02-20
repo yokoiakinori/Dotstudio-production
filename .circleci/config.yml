@@ -93,3 +93,11 @@ jobs:
             docker push ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1
             docker push ${ECR_DOMAIN_NGINX}:latest
 
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - build_images:
+          requires:
+            - build
