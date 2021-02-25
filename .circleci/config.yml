@@ -121,7 +121,7 @@ jobs:
           name: deploy # 新しいタスク定義ファイルを作成し、ECSに反映させる
           command: |
             aws ecs describe-task-definition --task-definition dotstudio | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > dotstudio_task_definitions.json
-            aws ecs register-task-definition --family dotstudio --cli-input-json --requires-compatibilities FARGATE file://dotstudio_task_definitions.json
+            aws ecs register-task-definition --family dotstudio --requires-compatibilities FARGATE --cli-input-json file://dotstudio_task_definitions.json
             aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio 
 
 
