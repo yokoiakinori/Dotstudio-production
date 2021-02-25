@@ -65,8 +65,6 @@ jobs:
   build_images:
     docker:
       - image: circleci/php:7.4.1-fpm
-        environment:
-          AWS_PAGER: ""
     steps:
       - checkout
       - setup_remote_docker
@@ -99,6 +97,8 @@ jobs:
   deploy:
     docker:
       - image: circleci/python:3.8.5
+        environment:
+          AWS_PAGER: ""
     steps:
       - run:
           name: install aws cli
