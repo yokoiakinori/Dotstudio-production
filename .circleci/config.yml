@@ -122,7 +122,7 @@ jobs:
           command: |
             aws ecs describe-task-definition --task-definition dotstudio | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > dotstudio_task_definitions.json
             aws ecs register-task-definition --family dotstudio --cli-input-json file://dotstudio_task_definitions.json
-            aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio
+            aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio --requires-compatibilities "FARGATE"
 
 
 workflows:
