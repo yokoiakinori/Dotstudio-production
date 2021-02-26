@@ -115,13 +115,15 @@ jobs:
 
       - run:
           name: login ecr
-          command: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 885529234609.dkr.ecr.ap-northeast-1.amazonaws.com
+          command: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com
 
       - run:
           name: deploy # 新しいタスク定義ファイルを作成し、ECSに反映させる
           command: |
             aws ecs describe-task-definition --task-definition dotstudio | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > dotstudio_task_definitions.json
-            aws ecs register-task-definition --family dotstudio --requires-compatibilities FARGATE --network-mode awsvpc --cli-input-json file://dotstudio_task_definitions.json
+            aws ecs register-task-definition --family dotstudio --requires-compatibilities FARGATE 
+            --network-mode awsvpc --task-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/dotstudio-role-ecs-task-execution 
+            --cpu 256 --memory 512 --cli-input-json file://dotstudio_task_definitions.json
             aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio 
 
 
@@ -133,3 +135,6 @@ workflows:
       - build_images:
           requires:
             - build
+      - deploy:
+          requires:
+            - build_images
