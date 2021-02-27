@@ -123,7 +123,7 @@ jobs:
             aws ecs describe-task-definition --task-definition dotstudio | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > dotstudio_task_definitions.json
             aws ecs register-task-definition --family dotstudio --requires-compatibilities FARGATE --network-mode awsvpc --task-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/dotstudio-role-ecs-task-execution --execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/dotstudio-role-ecs-task-execution --cpu 256 --memory 512 --cli-input-json file://dotstudio_task_definitions.json
 
-            # aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio 
+            aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio 
 
 
 workflows:
