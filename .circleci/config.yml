@@ -90,9 +90,41 @@ jobs:
       - run:
           name: push docker image # ECRにコンテナイメージをpush
           command: |
-            aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 885529234609.dkr.ecr.ap-northeast-1.amazonaws.com
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
             docker push ${ECR_DOMAIN_APP}:$CIRCLE_SHA1
             docker push ${ECR_DOMAIN_APP}:latest
+
+  deploy:
+    docker:
+      - image: circleci/python:3.8.5
+        environment:
+          AWS_PAGER: ""
+    steps:
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+      - run:
+         name: download jq # JSONファイルを簡単に操作するためにjqをインストール
+         command: |
+           wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+           mv jq-linux64 jq
+
+      - run:
+          name: login ecr
+          command: aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.ap-northeast-1.amazonaws.com
+
+      - run:
+          name: deploy # 新しいタスク定義ファイルを作成し、ECSに反映させる
+          command: |
+            aws ecs describe-task-definition --task-definition dotstudio | jq '.taskDefinition | { containerDefinitions: .containerDefinitions }' > dotstudio_task_definitions.json
+            aws ecs register-task-definition --family dotstudio --requires-compatibilities FARGATE --network-mode awsvpc --task-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/dotstudio-role-ecs-task-execution --execution-role-arn arn:aws:iam::${AWS_ACCOUNT_ID}:role/dotstudio-role-ecs-task-execution --cpu 256 --memory 512 --cli-input-json file://dotstudio_task_definitions.json
+
+            aws ecs update-service --cluster dotstudio-cluster --service dotstudio --task-definition dotstudio 
+
 
 workflows:
   version: 2
@@ -102,3 +134,6 @@ workflows:
       - build_images:
           requires:
             - build
+      - deploy:
+          requires:
+            - build_images
