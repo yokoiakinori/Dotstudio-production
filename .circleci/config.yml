@@ -1,0 +1,104 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # Specify the version you desire here
+      - image: circleci/php:7.4.1-node-browsers
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # Using the RAM variation mitigates I/O contention
+      # for database intensive operations.
+      # - image: circleci/mysql:5.7-ram
+      #
+      # - image: redis:2.8.19
+
+    steps:
+      - checkout
+
+      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      - run: sudo docker-php-ext-install zip
+      - run: sudo apt-get install -y libpng-dev libjpeg62-turbo-dev
+      - run: sudo docker-php-ext-configure gd --with-jpeg 
+      - run: sudo docker-php-ext-install -j$(nproc) gd
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "./server/laravel/composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: composer install -n --prefer-dist --working-dir=./server/laravel
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "./server/laravel/composer.json" }}
+          paths:
+            - ./vendor
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "./server/laravel/package.json" }}
+            - node-v1-
+      - run: yarn install --cwd ./server/laravel
+      - save_cache:
+          key: node-v1-{{ checksum "./server/laravel/package.json" }}
+          paths:
+            - ./server/laravel/node_modules
+      - run: 
+          name: base64 decode env file
+          command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
+
+      # prepare the database
+      - run: touch ./server/laravel/storage/testing.sqlite
+      - run: php ./server/laravel/artisan migrate --env=testing --database=sqlite_testing --force
+
+      # run tests with phpunit or codecept
+      #- run: ./vendor/bin/phpunit
+      - run: ./server/laravel/vendor/bin/phpunit --configuration=./server/laravel/phpunit.xml --testdox 
+  
+  build_images:
+    docker:
+      - image: circleci/php:7.4.1-fpm
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: composer install
+          command: composer install -n --prefer-dist --working-dir=./server/laravel
+      - run:
+          name: create config cache
+          command: php ./server/laravel/artisan config:cache
+
+      - run:
+          name: build container
+          command: |
+            docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
+
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+      - run:
+          name: push docker image # ECRにコンテナイメージをpush
+          command: |
+            aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 885529234609.dkr.ecr.ap-northeast-1.amazonaws.com
+            docker push ${ECR_DOMAIN_APP}:$CIRCLE_SHA1
+            docker push ${ECR_DOMAIN_APP}:latest
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - build_images:
+          requires:
+            - build
