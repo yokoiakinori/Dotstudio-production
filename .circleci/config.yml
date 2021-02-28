@@ -134,6 +134,12 @@ workflows:
       - build_images:
           requires:
             - build
+          filters:
+            branches:
+              only: master
       - deploy:
           requires:
             - build_images
+          filters:
+            branches:
+              only: master
