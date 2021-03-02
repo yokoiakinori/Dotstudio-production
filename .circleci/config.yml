@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # Specify the version you desire here
-      - image: circleci/php:7.4.1-fpm
+      - image: circleci/php:7.4-node-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -31,8 +31,12 @@ jobs:
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
 
+      - run: composer install -n --prefer-dist
+
       # prepare the database
       - run: touch ./server/laravel/storage/testing.sqlite
+      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
@@ -40,7 +44,7 @@ jobs:
   
   build_images:
     docker:
-      - image: circleci/php:7.4.1-fpm
+      - image: circleci/php:7.4-node-browsers
     steps:
       - checkout
       - setup_remote_docker
