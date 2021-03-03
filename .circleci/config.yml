@@ -40,6 +40,10 @@ jobs:
 
       # prepare the database
       - run: touch ./server/laravel/storage/testing.sqlite
+      - run: php ./server/laravel/artisan cache:clear
+      - run: php ./server/laravel/artisan config:clear
+      - run: php ./server/laravel/artisan route:clear
+      - run: php ./server/laravel/artisan view:clear 
       - run: php ./server/laravel/artisan migrate --env=testing --database=sqlite_testing --force
 
       # run tests with phpunit or codecept
