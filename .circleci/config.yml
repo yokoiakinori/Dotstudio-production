@@ -65,9 +65,6 @@ jobs:
       - run: 
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
-      - run:
-          name: create config cache
-          command: php ./server/laravel/artisan config:cache
 
       - run:
           name: install aws cli
