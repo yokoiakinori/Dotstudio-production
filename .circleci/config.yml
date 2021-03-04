@@ -53,6 +53,11 @@ jobs:
       - checkout
       - setup_remote_docker
 
+      - run:
+          name: build container
+          command: |
+            docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
+
       - run: php ./server/laravel/artisan cache:clear
       - run: php ./server/laravel/artisan config:clear
       - run: php ./server/laravel/artisan route:clear
@@ -63,11 +68,6 @@ jobs:
       - run:
           name: create config cache
           command: php ./server/laravel/artisan config:cache
-
-      - run:
-          name: build container
-          command: |
-            docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
 
       - run:
           name: install aws cli
