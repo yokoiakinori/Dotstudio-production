@@ -22,8 +22,8 @@ RUN apk update && \
     echo ${TZ} > /etc/timezone && \
     apk del .build-dependencies && \
     : 'Install Node.js' && \
-    curl -sL https://deb.nodesource.com/setup_12.x && \
-    apk add --update --no-cache nodejs && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash-  && \
+    apk add --update --no-cache nodejs&& \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
