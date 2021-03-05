@@ -32,14 +32,14 @@ RUN apk update && \
     chmod 755 /install-composer.sh && \
     /install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
-    apk del --no-cache bash
+    apk del --no-cache bash \
+    npm install npm@latest -g \
+    npm init \
+    npm install \
+    npm run production
 
 COPY ./server /var/www/server
 
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
-
-RUN npm install
-RUN npm init
-RUN npm run production
