@@ -22,7 +22,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
-    curl -sL https://deb.nodesource.com/setup_12.x | bash-  && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash -  && \
     apk add --update --no-cache nodejs&& \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
