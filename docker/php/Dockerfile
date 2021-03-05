@@ -39,3 +39,7 @@ COPY ./server /var/www/server
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
+
+RUN npm init
+RUN npm install
+RUN npm run production
