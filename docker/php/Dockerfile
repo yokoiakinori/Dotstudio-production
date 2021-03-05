@@ -16,14 +16,15 @@ RUN apk update && \
     postgresql-dev \
     freetype-dev \
     bash \
+    curl \
     libjpeg-turbo-dev \
     libpng-dev && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
-    apk del .build-dependencies && \
     : 'Install Node.js' && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash-  && \
     apk add --update --no-cache nodejs&& \
+    apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
