@@ -32,7 +32,7 @@ RUN apk update && \
     chmod 755 /install-composer.sh && \
     /install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
-    apk del --no-cache bash \
+    apk del --no-cache bash && \
     npm install npm@latest -g \
     npm init \
     npm install \
