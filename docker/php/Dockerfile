@@ -22,10 +22,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
-    apk add --update --no-cach nghttp2-libs nodejs npm&& \
-    npm init --no-bin-links && \
-    npm install --no-bin-links && \
-    npm run production --no-bin-links && \
+    apk add --update --no-cache nodejs npm&& \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
@@ -42,3 +39,7 @@ COPY ./server /var/www/server
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
+
+RUN npm init --no-bin-links && \
+    npm install --no-bin-links && \
+    npm run production --no-bin-links
