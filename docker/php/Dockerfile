@@ -22,7 +22,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
-    apk add --update --no-cach nghttp2 nodejs nodejs-npm&& \
+    apk add --update --no-cach nghttp2-libs nodejs npm&& \
     npm init --no-bin-links && \
     npm install --no-bin-links && \
     npm run production --no-bin-links && \
