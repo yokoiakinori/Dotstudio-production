@@ -23,6 +23,9 @@ RUN apk update && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
     apk add --update --no-cache nodejs nodejs-npm&& \
+    npm init --no-bin-links && \
+    npm install --no-bin-links && \
+    npm run production --no-bin-links && \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
@@ -32,10 +35,7 @@ RUN apk update && \
     chmod 755 /install-composer.sh && \
     /install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
-    apk del --no-cache bash && \
-    npm init --no-bin-links && \
-    npm install --no-bin-links && \
-    npm run production --no-bin-links
+    apk del --no-cache bash
 
 COPY ./server /var/www/server
 
