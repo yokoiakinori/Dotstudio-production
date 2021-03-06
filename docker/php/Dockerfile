@@ -42,4 +42,5 @@ WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
 
-RUN npm run production
+RUN cd ./server/laravel && \
+    npm run production
