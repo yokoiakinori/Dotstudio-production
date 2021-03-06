@@ -22,7 +22,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
-    apk add --update --no-cache nghttp2=1.43.0-r0 nodejs npm&& \
+    apk add --update --no-cache nghttp2 nodejs npm&& \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
@@ -33,9 +33,9 @@ RUN apk update && \
     /install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
     apk del --no-cache bash && \
-    npm init \
-    npm install \
-    npm run production
+    npm init --no-bin-links \
+    npm install --no-bin-links \
+    npm run production --no-bin-links
 
 COPY ./server /var/www/server
 
