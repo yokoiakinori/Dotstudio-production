@@ -7,6 +7,8 @@ RUN apk update && \
     apk add --update --no-cache --virtual=.build-dependencies \
     autoconf=~2.69 \
     gcc=~9.3 \
+    libstdc++ \
+    libgcc \
     g++=~9.3 \
     make=~4.2 \
     tzdata=2021a-r0 && \
