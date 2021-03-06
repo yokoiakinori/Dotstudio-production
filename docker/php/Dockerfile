@@ -22,8 +22,7 @@ RUN apk update && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     : 'Install Node.js' && \
-    curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
-    apk add --update --no-cache nodejs npm&& \
+    apk add --update --no-cache nodejs nodejs-npm&& \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
