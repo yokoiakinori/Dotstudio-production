@@ -42,6 +42,4 @@ WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
 
-RUN npm init --no-bin-links && \
-    npm install --no-bin-links && \
-    npm run production --no-bin-links
+RUN npm -v
