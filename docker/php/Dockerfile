@@ -1,3 +1,4 @@
+FROM node
 FROM php:7.4.1-fpm-alpine
 COPY ./docker/php/php.ini /usr/local/etc/php/
 
@@ -21,9 +22,6 @@ RUN apk update && \
     libpng-dev && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
-    : 'Install Node.js' && \
-    apk add --update --no-cache nghttp2 nodejs npm&& \
-    apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
@@ -32,13 +30,14 @@ RUN apk update && \
     chmod 755 /install-composer.sh && \
     /install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
-    apk del --no-cache bash && \
-    npm init --no-bin-links \
-    npm install --no-bin-links \
-    npm run production --no-bin-links
+    apk del --no-cache bash 
 
 COPY ./server /var/www/server
 
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
+
+RUN npm init && \
+    npm install && \
+    npm run production
