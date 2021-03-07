@@ -6,7 +6,7 @@
   <title>{{ config('app.name') }}</title>
 
   <!-- Scripts -->
-  <script src="https://yokoi-dotstudio.com/var/www/server/laravel/public/js/top.js" defer></script>
+  <script src="{{asset('js/app.js')}}" defer></script>
 
   <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather|Roboto:400">
