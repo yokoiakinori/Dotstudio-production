@@ -7,8 +7,6 @@ RUN apk update && \
     apk add --update --no-cache --virtual=.build-dependencies \
     autoconf=~2.69 \
     gcc=~9.3 \
-    libstdc++ \
-    libgcc \
     g++=~9.3 \
     make=~4.2 \
     tzdata=2021a-r0 && \
@@ -18,12 +16,14 @@ RUN apk update && \
     postgresql-dev \
     freetype-dev \
     bash \
-    curl \
     libjpeg-turbo-dev \
     libpng-dev && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
     apk del .build-dependencies && \
+    : 'Install Node.js' && \
+    curl -sL https://deb.nodesource.com/setup_12.x && \
+    apk add --update --no-cache nodejs && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
@@ -37,5 +37,3 @@ RUN apk update && \
 COPY ./server /var/www/server
 
 WORKDIR /var/www
-
-RUN chmod -R 777 /var/www/server/laravel
