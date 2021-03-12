@@ -37,3 +37,5 @@ RUN apk update && \
 COPY ./server /var/www/server
 
 WORKDIR /var/www
+
+RUN chmod -R 777 /var/www/server/laravel
