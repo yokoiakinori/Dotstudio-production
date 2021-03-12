@@ -77,14 +77,11 @@ jobs:
       - run: 
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
-<<<<<<< HEAD
-=======
 
       - run:
           name: build container
           command: |
             docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
->>>>>>> origin/master
 
       - run:
           name: install aws cli
