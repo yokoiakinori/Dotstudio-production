@@ -17,6 +17,6 @@
   {{-- <link rel="stylesheet" href="https://hypertext-candy.s3-ap-northeast-1.amazonaws.com/posts/vue-laravel-tutorial/app.css"> --}}
 </head>
 <body style="margin: 0">
-  <div id="app">これが読み込まれている</div>
+  <div id="app"></div>
 </body>
 </html>
