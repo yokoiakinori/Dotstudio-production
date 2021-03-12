@@ -62,6 +62,19 @@ jobs:
       - run: php ./server/laravel/artisan config:clear
       - run: php ./server/laravel/artisan route:clear
       - run: php ./server/laravel/artisan view:clear
+
+      - run:
+          working_directory: ./server/laravel
+          name: npm ci
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            fi
+
+      - run:
+          working_directory: ./server/laravel
+          command: npm run prod
+
       - run: 
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
