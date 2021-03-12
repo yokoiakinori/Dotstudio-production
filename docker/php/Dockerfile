@@ -23,8 +23,6 @@ RUN apk update && \
     libpng-dev && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo ${TZ} > /etc/timezone && \
-    : 'Install Node.js' && \
-    apk add --update --no-cache nghttp2-dev nodejs npm&& \
     apk del .build-dependencies && \
     : 'Install PHP Extensions' && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
@@ -41,7 +39,3 @@ COPY ./server /var/www/server
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
-
-RUN cd ./server/laravel && \
-    npm install && \
-    npm run production
