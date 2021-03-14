@@ -92,12 +92,6 @@ jobs:
             docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
 
       - run:
-          name: check container
-          command: |
-            docker exec -it ${ECR_DOMAIN_APP} bash
-            cat ./var/www/server/laravel/public/js/app.js
-
-      - run:
           name: install aws cli
           command: |
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
