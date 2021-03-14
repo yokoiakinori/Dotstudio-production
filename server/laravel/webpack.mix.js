@@ -17,6 +17,4 @@ mix.webpackConfig({
             ? "prod/chunks/[name].js"
             : "dev/chunks/[name].js"
     }
-})
-    .js("resources/js/app.js", "public/js")
-    .version();
+}).js("resources/js/app.js", "public/js");
