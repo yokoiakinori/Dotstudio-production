@@ -46,7 +46,7 @@ jobs:
       #- run: ./vendor/bin/phpunit
       - run: ./server/laravel/vendor/bin/phpunit --configuration=./server/laravel/phpunit.xml --testdox 
   
-  build_images:
+  build_app_images:
     docker:
       - image: circleci/php:7.4-node-browsers
     steps:
@@ -74,14 +74,6 @@ jobs:
           working_directory: ./server/laravel
           command: npm run prod
 
-      - run:
-          working_directory: ./server/laravel
-          command: |
-            cd ./public/js
-            cat app.js
-
-
-
       - run: 
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
@@ -104,6 +96,48 @@ jobs:
             aws ecr get-login-password --region ${AWS_DEFAULT_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
             docker push ${ECR_DOMAIN_APP}:$CIRCLE_SHA1
             docker push ${ECR_DOMAIN_APP}:latest
+
+  build_nginx_images:
+    docker:
+      - image: circleci/nginx:1.17-node-browsers
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          working_directory: ./server/laravel
+          name: npm ci
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            fi
+
+      - run:
+          working_directory: ./server/laravel
+          command: npm run prod
+
+      - run: 
+          name: base64 decode env file
+          command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
+
+      - run:
+          name: build container
+          command: |
+            docker build -t ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_NGINX}:latest --build-arg TZ=${TZ} -f ./docker/nginx/Dockerfile .
+
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+      - run:
+          name: push docker image # ECRにコンテナイメージをpush
+          command: |
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+            docker push ${ECR_DOMAIN_NGINX}:$CIRCLE_SHA1
+            docker push ${ECR_DOMAIN_NGINX}:latest
 
   deploy:
     docker:
@@ -142,15 +176,21 @@ workflows:
   build-test-and-deploy:
     jobs:
       - build
-      - build_images:
+      - build_app_images:
           requires:
             - build
           filters:
             branches:
               only: master
+      - build_nginx_images:
+          requires:
+            - build_app_images
+          filters:
+            branches:
+              only: master
       - deploy:
           requires:
-            - build_images
+            - build_nginx_images
           filters:
             branches:
               only: master
