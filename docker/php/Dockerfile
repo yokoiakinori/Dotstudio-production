@@ -24,10 +24,6 @@ RUN apk update && \
     docker-php-ext-install -j$(nproc) pdo_pgsql opcache && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install -j$(nproc) gd && \
-    : 'Install Composer' && \
-    chmod 755 /install-composer.sh && \
-    /install-composer.sh && \
-    mv composer.phar /usr/local/bin/composer && \
     apk del --no-cache bash
 
 COPY ./server /var/www
