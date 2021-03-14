@@ -39,3 +39,6 @@ COPY ./server /var/www/server
 WORKDIR /var/www
 
 RUN chmod -R 777 /var/www/server/laravel
+
+RUN cd ./server/laravel/public/js
+RUN cat app.js
