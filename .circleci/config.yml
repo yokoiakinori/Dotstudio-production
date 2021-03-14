@@ -99,7 +99,7 @@ jobs:
 
   build_nginx_images:
     docker:
-      - image: circleci/nginx:1.17-node-browsers
+      - image: circleci/node:9.8.0
     steps:
       - checkout
       - setup_remote_docker
