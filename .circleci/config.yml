@@ -74,6 +74,14 @@ jobs:
           working_directory: ./server/laravel
           command: npm run prod
 
+      - run:
+          working_directory: ./server/laravel
+          command: |
+            cd ./public/js
+            cat app.js
+
+
+
       - run: 
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
