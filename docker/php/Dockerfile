@@ -34,10 +34,8 @@ RUN apk update && \
     mv composer.phar /usr/local/bin/composer && \
     apk del --no-cache bash
 
-COPY ./server /var/www/server
+COPY ./server /var/www
 
 WORKDIR /var/www
 
-RUN chmod -R 777 /var/www/server/laravel
-
-RUN cat ./server/laravel/public/js/app.js
+RUN chmod -R 777 /var/www/laravel
