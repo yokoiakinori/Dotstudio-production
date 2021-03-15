@@ -99,7 +99,7 @@ jobs:
 
   build_nginx_images:
     docker:
-      - image: circleci/node:9.8.0
+      - image: circleci/node
     steps:
       - checkout
       - setup_remote_docker
