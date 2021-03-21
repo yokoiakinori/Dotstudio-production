@@ -83,7 +83,7 @@ jobs:
           command: |
             docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
 
-      - run: sudo docker-php-ext-install pdo_mysql
+      - run: sudo docker-php-ext-install pdo_pgsql
       - run: php ./server/laravel/artisan migrate --force
 
       - run:
