@@ -78,6 +78,8 @@ jobs:
           name: base64 decode env file
           command: echo $ENV_FILE | base64 -di > ./server/laravel/.env
 
+      - run: php ./server/laravel/artisan migrate
+
       - run:
           name: build container
           command: |
