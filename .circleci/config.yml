@@ -83,11 +83,6 @@ jobs:
           command: |
             docker build -t ${ECR_DOMAIN_APP}:$CIRCLE_SHA1 -t ${ECR_DOMAIN_APP}:latest --build-arg TZ=${TZ} -f ./docker/php/Dockerfile .
 
-      - run: sudo apt update
-      - run: sudo apt-get -y install libpq-dev
-      - run: sudo docker-php-ext-install pdo_pgsql
-      - run: php ./server/laravel/artisan migrate --force
-
       - run:
           name: install aws cli
           command: |
