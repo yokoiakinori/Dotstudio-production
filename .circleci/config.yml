@@ -172,11 +172,11 @@ jobs:
 
       - run:
           name: migration
-          command: aws ecs run-task \
-            --cluster dotstudio-cluster \
-            --region ${AWS_DEFAULT_REGION} \
-            --launch-type FARGATE \
-            --network-configuration "awsvpcConfiguration={subnets=[${SUBNET_1},${SUBNET_2}],securityGroups=[${SECURITY_GROUP}],assignPublicIp=ENABLED}" \
+          command: aws ecs run-task 
+            --cluster dotstudio-cluster 
+            --region ${AWS_DEFAULT_REGION} 
+            --launch-type FARGATE 
+            --network-configuration "awsvpcConfiguration={subnets=[${SUBNET_1},${SUBNET_2}],securityGroups=[${SECURITY_GROUP}],assignPublicIp=ENABLED}" 
             --task-definition migrate
 workflows:
   version: 2
