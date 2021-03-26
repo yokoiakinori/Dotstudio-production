@@ -9,9 +9,11 @@
 - vue@2.6.12 （vuex,vue-router,その他ライブラリ）
 - sass
 - npm 6.14.10
-#### インフラ
-- docker 
-- AWS（EC2,RDS,S3,ECS）※使う予定
+#### インフラ・開発環境
+- docker/docker-compose
+- AWS（VPC,IAM,ECR,ECS〔FARGATE〕,RDS,S3,ACM,Route53,ALB）
+- CircleCI
+- Terraform
 #### SaaS
 - Algolia
 ### アプリの概要
