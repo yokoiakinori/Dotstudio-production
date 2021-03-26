@@ -5,6 +5,7 @@
 - PHP 7.4.1
 - Laravel 6.20.0
 - postgreSQL 11.10
+- Nginx 1.17.10
 #### フロントエンド
 - vue@2.6.12 （vuex,vue-router,その他ライブラリ）
 - sass
