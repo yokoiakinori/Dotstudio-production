@@ -80,9 +80,7 @@ export default {
             user: {
                 name: String,
                 introduction: String,
-                thumbnail: String,
-                followCount: Number,
-                followerCount: Number
+                thumbnail: String
             },
             updateForm: {
                 name: "",
@@ -113,10 +111,6 @@ export default {
 
             // ファイルを読み込み終わったタイミングで実行する処理
             reader.onload = e => {
-                // previewに読み込み結果（データURL）を代入する
-                // previewに値が入ると<output>につけたv-ifがtrueと判定される
-                // また<output>内部の<img>のsrc属性はpreviewの値を参照しているので
-                // 結果として画像が表示される
                 this.preview = e.target.result;
             };
 
@@ -127,7 +121,6 @@ export default {
         },
         reset() {
             this.preview = "";
-            this.thumbnail = null;
         },
         async showUser() {
             const response = await axios.get(`/api/users/${this.id}`);
@@ -135,11 +128,11 @@ export default {
                 this.$store.commit("error/setCode", response.status);
                 return false;
             }
+            this.updateForm.name = response.data[0].name;
+            this.updateForm.introduction = response.data[0].introduction;
             this.user.name = response.data[0].name;
             this.user.introduction = response.data[0].introduction;
             this.user.thumbnail = response.data[0].userthumbnail.url;
-            this.user.followCount = response.data[1];
-            this.user.followerCount = response.data[2];
         },
         thumbnailCurrent() {
             this.user.thumbnail = this.preview;
@@ -154,19 +147,20 @@ export default {
                 this.$store.commit("error/setCode", response.status);
                 return false;
             }
-            if (this.thumbnail != null) {
-                this.thumbnailUpdate();
-            }
+            await this.thumbnailUpdate();
             this.$store.commit("auth/updateUser", response);
             this.$router.push("/");
         },
         async thumbnailUpdate() {
-            const formData = new FormData();
-            formData.append("userthumbnail", this.thumbnail);
-            const response = await axios.post(
-                "/api/thumbnail/update",
-                formData
-            );
+            if (this.thumbnail != null) {
+                const formData = new FormData();
+                formData.append("userthumbnail", this.thumbnail);
+                console.log(formData.userthumbnail);
+                const response = await axios.post(
+                    "/api/thumbnail/update",
+                    formData
+                );
+            }
         }
     },
     watch: {
