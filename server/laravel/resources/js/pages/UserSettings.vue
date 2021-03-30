@@ -158,7 +158,7 @@ export default {
                 this.thumbnailUpdate();
             }
             this.$store.commit("auth/updateUser", response);
-            this.$router.push(`/settings/${this.id}`);
+            this.$router.push("/");
         },
         async thumbnailUpdate() {
             const formData = new FormData();
