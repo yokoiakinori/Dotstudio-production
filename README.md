@@ -1,4 +1,4 @@
-# DotStudio-nginx
+# DotStudio
 ドット絵作成共有SNSアプリです。
 ## アプリの概要
 ドット絵を作成して共有するSNSアプリとなります。<br>
