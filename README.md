@@ -31,6 +31,11 @@ docker/dokcercomposeを使用して開発環境を構築しております。<br
 3. dockerhubを使えば一からコードを書く必要もなくなる
 
 以上のようなメリットも享受できます。
+### デプロイ
+Circle CIを利用しCI/CDパイプラインを構築し、githubのリポジトリにpushすると自動テスト及び自動ビルドを行いECRにイメージがpushされるような仕組みを構築しました。<br>CI/CDツールには様々あるようですがCircleCIを採用した理由は、環境構築コストや運営コストを低く抑えることができるからです。
+### IaC（Infrastructure as Code）
+インフラ構成を今後使いまわしたり、柔軟にカスタマイズすることを想定しTerraformによるインフラのコード化を導入いたしました。<br>インフラを柔軟にカスタマイズできるようリソースごとにフォルダを分けて、`.tfstate`ファイルを用いてリソースの値を伝播させています。<br>CodeDeployとは違いGCPやAzure等にも利用できる汎用性の高いIaCツールとしてTerraformを採用させていただきました。
+
 ## データベース設計
 ![ER図](https://user-images.githubusercontent.com/26515575/117104065-7136c500-adb6-11eb-9aab-bcf2a9a97473.jpg)
 ## 使用技術
