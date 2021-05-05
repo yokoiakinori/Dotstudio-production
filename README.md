@@ -38,6 +38,14 @@ Circle CIを利用しCI/CDパイプラインを構築し、githubのリポジト
 
 ## データベース設計
 ![ER図](https://user-images.githubusercontent.com/26515575/117104065-7136c500-adb6-11eb-9aab-bcf2a9a97473.jpg)
+|テーブル名|テーブルの解説|
+|:---:|:---|
+|users|登録ユーザー情報|
+|products|投稿された作品|
+|likes|投稿作品に対するいいね|
+|comments|投稿作品に対するコメント|
+|notifications|通知情報|
+|users|登録ユーザー情報|
 ## 使用技術
 - バックエンド
   - PHP 7.4.1
