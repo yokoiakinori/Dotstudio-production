@@ -45,7 +45,12 @@ Circle CIを利用しCI/CDパイプラインを構築し、githubのリポジト
 |likes|投稿作品に対するいいね|
 |comments|投稿作品に対するコメント|
 |notifications|通知情報|
-|users|登録ユーザー情報|
+|producttags|投稿作品につけるタグ|
+|userthumbnails|ユーザーのサムネイル|
+|followers|自分のフォロワー及び自分がフォローしている人の情報|
+|materialproducts|スタンプ用の素材|
+|material_requests|欲しい素材のリクエスト|
+|request_replies|リクエストに対する返信|
 ## 使用技術
 - バックエンド
   - PHP 7.4.1
