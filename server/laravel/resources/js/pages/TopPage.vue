@@ -1,19 +1,24 @@
 <template>
-    <AllProducts
-        :products="products"
-        :currentPage="currentPage"
-        :lastPage="lastPage"
-        :routerPath="routerPath"
-    ></AllProducts>
+    <div>
+        <LatestRequestsList :requests="requests"></LatestRequestsList>
+        <AllProducts
+            :products="products"
+            :currentPage="currentPage"
+            :lastPage="lastPage"
+            :routerPath="routerPath"
+        ></AllProducts>
+    </div>
 </template>
 
 <script>
+import LatestRequestsList from "../components/LatestRequestsList.vue";
 import AllProducts from "../components/AllProducts.vue";
 import Axios from "axios";
 import { OK } from "../util";
 export default {
     components: {
-        AllProducts
+        AllProducts,
+        LatestRequestsList
     },
     props: {
         page: {
@@ -27,6 +32,7 @@ export default {
             currentPage: 0,
             lastPage: 0,
             products: [],
+            requests: [],
             routerPath: "/"
         };
     },
@@ -34,6 +40,7 @@ export default {
         $route: {
             async handler() {
                 this.$store.commit("randing/loadingSwitch", true);
+                await this.showRequests();
                 await this.showProducts();
                 this.$store.commit("randing/loadingSwitch", false);
             },
@@ -41,6 +48,14 @@ export default {
         }
     },
     methods: {
+        async showRequests() {
+            const response = await axios.get("/api/requests/latest");
+            if (response.status !== OK) {
+                this.$store.commit("error/setCode", response.status);
+                return false;
+            }
+            this.requests = response.data;
+        },
         async showProducts() {
             const response = await axios.get(
                 `/api/products/index/?page=${this.page}`
@@ -59,18 +74,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-.Home {
-    margin: 0 auto;
-    margin-top: 0;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    flex-flow: column;
-}
-.productsList {
-    margin-top: 30px;
-    display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
-}
 </style>

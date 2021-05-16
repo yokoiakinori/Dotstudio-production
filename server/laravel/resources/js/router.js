@@ -5,7 +5,6 @@ import store from "./store";
 
 Vue.use(VueRouter);
 
-// パスとコンポーネントのマッピング
 const routes = [
     {
         path: "/",
@@ -17,6 +16,12 @@ const routes = [
                 },
                 "top"
             );
+        },
+        props: route => {
+            const page = route.query.page;
+            return {
+                page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1
+            };
         }
     },
     {
@@ -264,6 +269,76 @@ const routes = [
             );
         },
         props: true
+    },
+    {
+        path: "/requests",
+        component: resolve => {
+            require.ensure(
+                ["./pages/AllRequests.vue"],
+                () => {
+                    resolve(require("./pages/AllRequests.vue"));
+                },
+                "all-requests"
+            );
+        },
+        props: route => {
+            const page = route.query.page;
+            return {
+                page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1
+            };
+        }
+    },
+    {
+        path: "/request/new",
+        component: resolve => {
+            require.ensure(
+                ["./pages/CreateRequest.vue"],
+                () => {
+                    resolve(require("./pages/CreateRequest.vue"));
+                },
+                "create-request"
+            );
+        },
+        beforeEnter(to, from, next) {
+            if (!store.getters["auth/check"]) {
+                next("/login");
+            } else {
+                next();
+            }
+        }
+    },
+    {
+        path: "/request/:id",
+        component: resolve => {
+            require.ensure(
+                ["./pages/CurrentRequest.vue"],
+                () => {
+                    resolve(require("./pages/CurrentRequest.vue"));
+                },
+                "current-request"
+            );
+        },
+        props: true
+    },
+    {
+        path: "/request/:id/update",
+        component: resolve => {
+            require.ensure(
+                ["./pages/UpdateRequest.vue"],
+                () => {
+                    resolve(require("./pages/UpdateRequest.vue"));
+                },
+                "update-request"
+            );
+        },
+        props: true,
+        beforeEnter(to, from, next) {
+            if (!store.getters["auth/check"]) {
+                next("/login");
+            } else {
+                next();
+            }
+        }
     },
     {
         path: "/500",

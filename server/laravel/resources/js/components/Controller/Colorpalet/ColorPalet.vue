@@ -1,11 +1,12 @@
 <template>
     <div>
-        <ul class="palet">
+        <ul class="palet flexRowSpaceBetween">
             <li
                 v-for="paletcolor in paletcolors"
                 :key="paletcolor.id"
                 :class="{ active: currentpalet === paletcolor.id }"
                 :style="activeStyle(paletcolor.color)"
+                class="flexRowCenter"
             >
                 <i
                     class="fas fa-palette"
@@ -58,14 +59,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 @import "../../../../sass/_variables";
+@import "../../../../sass/common";
 div {
     width: 100%;
-    height: 32%;
 }
 .palet {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
     height: 100%;
     padding: 20px;
     margin: 0;
@@ -73,11 +71,8 @@ div {
 li {
     transition-duration: 0.3s;
     border-radius: 50%;
-    width: 25%;
-    height: calc(100% / 3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 5vw;
+    height: 5vw;
     i {
         transition-duration: 0.3s;
         font-size: 25px;

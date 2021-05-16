@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flexRowCenter">
         <button v-if="haveMaterial" @click="modalToggle">
             <i class="fas fa-stamp"></i>
             スタンプ：{{ currentMaterialName }}
@@ -15,7 +15,7 @@
                 @formEnter="currentMaterial"
             >
                 <h2>スタンプ一覧</h2>
-                <ul>
+                <ul class="flexRowLeft">
                     <li
                         v-for="(material, index) in materials"
                         :key="index"
@@ -58,7 +58,8 @@ export default {
             return this.materials[this.currentMaterialIndex - 1].productname;
         },
         productStyle() {
-            const product = `${this.maxwidth / 3}px`;
+            const displayNumberRow = 3;
+            const product = `${this.maxwidth / displayNumberRow}px`;
             return {
                 width: product,
                 height: product
@@ -107,8 +108,6 @@ export default {
 @import "../../../../sass/common.scss";
 div {
     width: 100%;
-    display: flex;
-    justify-content: center;
 }
 button {
     width: 85%;
@@ -137,7 +136,5 @@ button {
 }
 ul {
     padding: 0;
-    display: flex;
-    justify-content: start;
 }
 </style>

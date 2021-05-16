@@ -1,5 +1,5 @@
 <template>
-    <div class="MyDrawing">
+    <div class="MyDrawing flexRowLeft">
         <Controller></Controller>
         <MainCanvas></MainCanvas>
     </div>
@@ -28,8 +28,6 @@ export default {
 
 <style lang="scss" scoped>
 .MyDrawing {
-    display: flex;
-    justify-content: left;
     box-sizing: border-box;
     width: 100%;
     max-width: 1100px;

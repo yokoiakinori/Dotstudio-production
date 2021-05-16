@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition>
-            <modalWindow
+            <ModalWindow
                 v-if="modalWindowCheck"
                 @closeModal="modalToggle"
                 @formEnter="createProduction"
@@ -14,14 +14,14 @@
                 <input type="number" v-model="linedot" />
                 <label for="tags">タグ（カテゴリー、イメージ）</label>
                 <input type="text" v-model="producttagstring" />
-                <ul class="tagList">
+                <ul class="tagList flexRowStart">
                     <li v-for="(productTag, index) in productTags" :key="index">
                         <ProductTag :message="productTag"></ProductTag>
                     </li>
                 </ul>
-            </modalWindow>
+            </ModalWindow>
         </transition>
-        <ul class="UserProductions" v-if="productListLength > 0">
+        <ul class="UserProductions flexRowLeft" v-if="productListLength > 0">
             <li
                 v-for="product in productionList"
                 :key="product.uniquekey"
@@ -30,7 +30,7 @@
                     'UserProductions--active':
                         currentProduct === product.uniquekey
                 }"
-                class="UserProductions__list UserProductions__item"
+                class="UserProductions__list UserProductions__item padding_side2_vertical1"
             >
                 <p class="UserProductions__item__name">
                     {{ product.productname }}
@@ -52,11 +52,11 @@
                 id="createProduction"
                 @click="modalToggle"
                 v-if="this.currentPage == this.lastPage"
-                class="UserProductions__list"
+                class="UserProductions__list padding1"
             >
-                <span>＋</span>ここをクリックで新規作成
+                <span class="margin1_right">＋</span>ここをクリックで新規作成
             </li>
-            <li class="pagination UserProductions__list">
+            <li class="pagination margin1-5_top flexRowAlignCenter">
                 <Pagination
                     :current-page="currentPage"
                     :last-page="lastPage"
@@ -71,8 +71,7 @@
 import ModalWindow from "../ModalWindow.vue";
 import Pagination from "../Pagination.vue";
 import ProductTag from "../ProductTag.vue";
-import Axios from "axios";
-import { OK, CREATED } from "../../util";
+import { CREATED } from "../../util";
 export default {
     components: {
         ModalWindow,
@@ -222,35 +221,27 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/common.scss";
-@import "../../../sass/modal.scss";
 div {
     width: 100%;
 }
 .UserProductions {
     width: 100%;
-    height: 220px;
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: start;
-    flex-direction: column;
-    align-items: center;
     &__list {
         font-size: 18px;
         width: 100%;
-        height: 20%;
         list-style: none;
         display: flex;
         align-items: center;
-        border-top: solid 1.2px $maincolor;
+        border-bottom: solid 1.2px $maincolor;
         transition-duration: 0.3s;
-
-        span {
-            margin: 0 20px;
+        &:first-child {
+            border-top: solid 1.2px $maincolor;
         }
     }
     &__item {
-        padding: 0 20px;
         justify-content: space-between;
         &__name {
             font-size: 17px;
@@ -290,12 +281,8 @@ input {
     margin-bottom: 30px;
 }
 .tagList {
-    display: flex;
     height: 100px;
     padding: 0;
-    flex-flow: row;
-    justify-content: flex-start;
-    align-items: flex-start;
     li {
         border: none;
         display: inline-block;

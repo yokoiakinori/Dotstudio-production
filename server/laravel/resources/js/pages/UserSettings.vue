@@ -2,7 +2,7 @@
     <div class="wrapper">
         <h3>ユーザープロフィールの編集</h3>
         <div class="userSettings">
-            <div class=" updateThumbnail">
+            <div class="updateThumbnail margin3_bottom">
                 <button class="edit" @click="modalToggle">
                     <i class="fas fa-edit"></i>変更
                 </button>
@@ -19,7 +19,7 @@
                         @formEnter="thumbnailCurrent"
                     >
                         <h3>サムネイル更新</h3>
-                        <label for="file_upload">
+                        <label for="file_upload" class="margin2_bottom">
                             ファイルを選択してください。
                             <input
                                 type="file"
@@ -34,7 +34,7 @@
                 </transition>
             </div>
 
-            <form class="form" action @submit.prevent="profileUpdate">
+            <form class="margin2_top" action @submit.prevent="profileUpdate">
                 <label for="update-name">新しい名前</label>
                 <input
                     class="form__item"
@@ -178,7 +178,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-@import "../../sass/modal.scss";
 .wrapper {
     width: 90%;
     display: flex;
@@ -207,14 +206,12 @@ export default {
     margin: auto;
     position: relative;
     flex-flow: column;
-    margin-bottom: 30px;
     label {
         background-color: rgba($color: $maincolor, $alpha: 0.2);
         color: $maincolor;
         display: inline-block;
         cursor: pointer;
         padding: 10px;
-        margin-bottom: 20px;
     }
     input {
         display: none;
@@ -236,13 +233,6 @@ export default {
     width: 100%;
     height: 100%;
     cursor: pointer;
-}
-.updateInformation {
-    margin-left: 20px;
-    height: 180px;
-    label {
-        margin-top: 10px;
-    }
 }
 .imageViewer {
     width: 100%;

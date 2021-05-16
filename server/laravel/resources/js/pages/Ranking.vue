@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="flexColumnAlignCenter">
         <RankingNavbar class="nav" />
         <RouterView />
     </div>
@@ -15,11 +15,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrap {
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-}
 .nav {
     width: 800px;
 }

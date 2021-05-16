@@ -31,6 +31,7 @@ Route::get('/users/products/{id}', 'UserController@products')->name('user.produc
 Route::get('/users/likeproducts/{id}', 'UserController@likeproducts')->name('user.likeproducts');
 Route::get('/users/{id}', 'UserController@currentuser')->name('user.current');
 Route::post('/userupdate', 'UserController@updateuser')->name('user.update');
+Route::get('/user/{id}/requests', 'UserController@requests')->name('user.requests');
 
 Route::post('/thumbnail', 'UserthumbnailController@create')->name('thumbnail.create');
 Route::post('/thumbnail/update', 'UserthumbnailController@update')->name('thumbnail.update');
@@ -51,6 +52,14 @@ Route::put('/products/{id}/like', 'ProductController@like')->name('product.like'
 Route::delete('/products/{id}/like', 'ProductController@unlike');
 Route::get('/products/ranklist/like', 'ProductController@likedrank')->name('product.likedrank');
 Route::get('/products/ranklist/watch', 'ProductController@watchedrank')->name('product.watchedrank');
+
+Route::post('/requests', 'MaterialRequestController@create')->name('materialrequest.create');
+Route::post('/requests/update', 'MaterialRequestController@update')->name('materialrequest.update');
+Route::post('/requests/reply', 'MaterialRequestController@reply')->name('request.reply');
+Route::put('/requests/complete/{id}', 'MaterialRequestController@complete')->name('materialrequest.complete');
+Route::get('/requests', 'MaterialRequestController@all')->name('materialrequest.all');
+Route::get('/requests/latest', 'MaterialRequestController@latest')->name('materialrequest.latest');
+Route::get('/requests/{id}', 'MaterialRequestController@current')->name('materialrequest.current');
 
 Route::put('/material/{id}', 'ProductController@materialadd')->name('material.add');
 Route::get('/materials', 'ProductController@materiallist')->name('materials.list');

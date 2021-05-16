@@ -2,7 +2,7 @@
     <button
         v-if="state == 'detail'"
         @click="onMaterialClick"
-        class="formButton"
+        class="capsuleButton"
     >
         素材としてダウンロード
     </button>
@@ -10,7 +10,7 @@
         v-else
         @click.prevent="onMaterialClick"
         :class="{
-            material_haved: materials.includes(product.id)
+            material_haved: materialHaved.includes(product.id)
         }"
     >
         <i class="fas fa-stamp"></i>
@@ -24,6 +24,11 @@ export default {
     props: {
         state: String,
         product: Object
+    },
+    data() {
+        return {
+            materialHaved: []
+        };
     },
     computed: {
         materials() {
@@ -50,12 +55,18 @@ export default {
             const response = await axios.put(
                 `/api/material/${this.product.id}`
             );
+            this.materialHaved.push(this.product.id);
 
             if (response.status !== OK) {
                 this.$store.commit("error/setCode", response.status);
                 return false;
             }
         }
+    },
+    created() {
+        this.$nextTick(function() {
+            this.materialHaved = this.materials;
+        });
     }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <footer class="footer">
+    <footer class="flexRowCenter">
         <button v-if="isLogin" @click="logout">
             ログアウト
         </button>
@@ -36,9 +36,6 @@ export default {
 @import "../../sass/common.scss";
 footer {
     height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     button {
         padding: 10px;
         background-color: rgba($color: $maincolor, $alpha: 0.15);

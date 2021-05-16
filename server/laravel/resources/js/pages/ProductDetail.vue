@@ -1,13 +1,17 @@
 <template>
-    <div v-if="product" class="productDetail">
+    <div v-if="product" class="productDetail flexRow margin1-5_top">
         <Product :product="product" :productstyle="productStyle" />
-        <div class="productInformation">
-            <div class="name">
+        <div class="productInformation margin1-5_top">
+            <div class="flexRowSpaceBetween margin1_top">
                 <h2>{{ product.productname }}</h2>
                 <p class="date">作成日：{{ product.created_at }}</p>
             </div>
-            <ul>
-                <li v-for="tag in product.producttags" :key="tag.id">
+            <ul class="flexRow margin2_top">
+                <li
+                    v-for="tag in product.producttags"
+                    :key="tag.id"
+                    class="flexRowAlignCenter"
+                >
                     <RouterLink to="/tagsearch?page=1">
                         <ProductTag :message="tag.message"></ProductTag>
                     </RouterLink>
@@ -18,24 +22,32 @@
                 @click="addMaterialNotification"
                 :state="'detail'"
                 :product="product"
+                class="margin2_top"
             />
-            <ul>
-                <li v-for="material in product.usedmaterial" :key="material.id">
+            <ul class="flexRow margin2_top">
+                <li
+                    v-for="material in product.usedmaterial"
+                    :key="material.id"
+                    class="flexRowAlignCenter"
+                >
                     {{ material.user.name }}さんの{{
                         material.productname
                     }}が使用されています。
                 </li>
             </ul>
             <div class="evaluations">
-                <ThumbnailImage :user="product.user" class="thumbnail" />
-                <p>
+                <ThumbnailImage
+                    :user="product.user"
+                    class="thumbnail margin1-5_right"
+                />
+                <p class="margin3_right">
                     <i class="fas fa-heart heartIcon"></i
                     >{{ product.likes_count }}
                 </p>
                 <p><i class="fas fa-eye"></i>{{ product.countview }}</p>
             </div>
         </div>
-        <div class="comments">
+        <div class="comments margin3_side">
             <h2>Comments</h2>
             <ul v-if="product.comments.length > 0">
                 <CommentListItem
@@ -45,11 +57,11 @@
                     class="commentItem"
                 />
             </ul>
-            <p v-else>まだコメントはありません。</p>
+            <p v-else class="margin1-5_bottom">まだコメントはありません。</p>
             <form
                 v-if="isLogin"
                 @submit.prevent="addComment"
-                class="commentForm"
+                class="commentForm flexColumnAlignCenter"
             >
                 <div v-if="commentErrors">
                     <ul v-if="commentErrors.content">
@@ -58,9 +70,12 @@
                         </li>
                     </ul>
                 </div>
-                <textarea v-model="commentContent"></textarea>
+                <textarea
+                    v-model="commentContent"
+                    class="margin2_bottom"
+                ></textarea>
                 <div>
-                    <button type="submit" class="formButton">
+                    <button type="submit" class="capsuleButton">
                         コメントをつける
                     </button>
                 </div>
@@ -169,13 +184,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-button {
-    height: 40px;
-    padding: 0 40px;
-}
 .productDetail {
-    display: flex;
-    flex-flow: row wrap;
     width: 1000px;
     margin: 0 auto;
     padding-top: 15px;
@@ -190,31 +199,12 @@ button {
 .productInformation {
     width: 420px;
     height: 400px;
-    margin-top: 15px;
-    .name {
-        display: flex;
-        justify-content: space-between;
-    }
-    ul {
-        display: flex;
-        li {
-            display: flex;
-            align-items: center;
-        }
-    }
 }
 .comments {
-    margin: 0 30px;
     width: 450px;
-    p {
-        margin-bottom: 15px;
-    }
 }
 .commentForm {
     background-color: white;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
     padding: 30px;
     border-radius: 10px;
     width: 100%;
@@ -224,7 +214,6 @@ button {
         height: 85px;
         border: solid 1.5px rgba($color: $maincolor, $alpha: 0.6);
         border-radius: 5px;
-        margin-bottom: 20px;
     }
 }
 .commentItem {
@@ -234,15 +223,11 @@ button {
 .evaluations {
     display: flex;
     align-items: center;
-    a {
-        margin-right: 15px;
-    }
     i {
         margin-right: 5px;
     }
     p {
         font-size: 16px;
-        margin-right: 30px;
     }
 }
 </style>

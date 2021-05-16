@@ -59,18 +59,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-.Home {
-    margin: 0 auto;
-    margin-top: 0;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    flex-flow: column;
-}
-.productsList {
-    margin-top: 30px;
-    display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
-}
 </style>

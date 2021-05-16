@@ -1,13 +1,13 @@
 <template>
-    <div :style="productstyle">
+    <div :style="productstyle" class="flexRowCenter">
         <div
-            class="card"
+            class="card roundSquareShadow flexRowCenter"
             @mouseleave="currentToggle"
             @mouseenter="currentToggle"
         >
             <transition>
                 <RouterLink :to="`/products/${product.id}`" v-show="current">
-                    <div>
+                    <div class="flexColumn">
                         <button
                             :class="{
                                 product_action_liked: product.liked_by_user
@@ -32,6 +32,7 @@
                 :product="product"
                 :mountedStatus="mountedStatus"
                 :alldot="alldot"
+                class="flexRow"
             >
             </Picture>
         </div>
@@ -92,58 +93,45 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../../sass/common.scss";
-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .card {
-        background-color: white;
+.card {
+    padding: 0;
+    margin: 0;
+    width: 90%;
+    height: 90%;
+    position: relative;
+    a {
+        position: absolute;
+        border-radius: 15px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        background-color: rgba($maincolor, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-end;
+        div {
+            margin: 18px 18px 0 0;
+            flex-flow: column;
+        }
+        button {
+            transition-duration: 0.3s;
+            z-index: 20;
+            margin-bottom: 10px;
+            width: 60px;
+            height: 35px;
+            border-radius: 5px;
+            background-color: white;
+        }
+    }
+    ul {
         padding: 0;
         margin: 0;
-        width: 90%;
-        height: 90%;
-        border-radius: 15px;
-        position: relative;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 2px 2px 3px rgba($maincolor, 0.15);
-        a {
-            position: absolute;
-            border-radius: 15px;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            background-color: rgba($maincolor, 0.2);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-end;
-            div {
-                margin: 18px 18px 0 0;
-                flex-flow: column;
-            }
-            button {
-                transition-duration: 0.3s;
-                z-index: 20;
-                margin-bottom: 10px;
-                width: 60px;
-                height: 35px;
-                border-radius: 5px;
-                background-color: white;
-            }
-        }
-        ul {
-            padding: 0;
-            margin: 0;
-            width: 85%;
-            height: 85%;
-            display: flex;
-            list-style-type: none;
-            flex-direction: row;
-            flex-wrap: wrap;
-        }
+        width: 85%;
+        height: 85%;
+        list-style-type: none;
     }
 }
 .product_action_liked {

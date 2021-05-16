@@ -17,26 +17,12 @@ class ProductListApiTest extends TestCase
      */
     public function AllProductsListReturn()
     {
-        factory(Product::class, 5)->create();
+        $product_count = 5;
+        factory(Product::class, $product_count)->create();
 
         $response = $this->json('GET', route('product.index'));
 
-        $products = Product::with('user')->orderBy('created_at', 'desc')->get();
-
-        $expected_data = $products->map(function ($product) {
-            return [
-                'id' => $product->id,
-                'productname' => $product->productname,
-                'linedot' => $product->linedot,
-                'alldot' => $product->alldot,
-                'colors' => $product->colors,
-                'user' => [
-                    'name' => $product->user->name
-                ],
-            ];
-        })
-            ->all();
         $response->assertStatus(200)
-            ->assertJsonCount(5, 'data');
+            ->assertJsonCount($product_count, 'data');
     }
 }

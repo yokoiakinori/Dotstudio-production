@@ -1,6 +1,6 @@
 <template>
-    <div id="MainCanvas">
-        <ul>
+    <div id="MainCanvas" class="flexRowCenter">
+        <ul class="flexRow">
             <Dot
                 v-for="item in allCanvasDot"
                 :key="item"
@@ -148,19 +148,20 @@ export default {
         },
         async stampGuide(start) {
             this.guideReset();
-            const lineEnd = start + this.currentMaterial.linedot;
+            const lineEnd = start + this.currentMaterial.linedot - 1;
             for (let i = 0; i < this.currentMaterial.linedot; i++) {
                 for (let j = start; j <= lineEnd; j++) {
                     if (
                         //キャンバスからはみ出していない場合
-                        start % this.lineDotVolume <
+                        start % this.lineDotVolume <=
                             this.lineDotVolume -
                                 this.currentMaterial.linedot +
                                 1 &&
-                        start / this.lineDotVolume <
+                        start / this.lineDotVolume <=
                             this.lineDotVolume -
                                 this.currentMaterial.linedot +
-                                1
+                                1 &&
+                        start % this.lineDotVolume != 0
                     ) {
                         this.$set(
                             this.guideColor,
@@ -194,11 +195,12 @@ export default {
                 start % this.lineDotVolume >
                     this.lineDotVolume - this.currentMaterial.linedot + 1 ||
                 start / this.lineDotVolume >
-                    this.lineDotVolume - this.currentMaterial.linedot + 1
+                    this.lineDotVolume - this.currentMaterial.linedot + 1 ||
+                start % this.lineDotVolume == 0
             ) {
                 alert("この位置では描画領域よりはみ出してしまいます！");
             } else {
-                const lineEnd = start + this.currentMaterial.linedot;
+                const lineEnd = start + this.currentMaterial.linedot - 1;
                 for (let i = 0; i < this.currentMaterial.linedot; i++) {
                     for (let j = start; j <= lineEnd; j++) {
                         this.colorNumber[
@@ -325,19 +327,13 @@ export default {
     width: 60%;
     height: 60vw;
     max-height: 660px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: white;
     box-shadow: 2px 2px 3px rgba($maincolor, 0.15);
     ul {
         width: 90%;
         height: 90%;
         padding: 0;
-        display: flex;
         list-style-type: none;
-        flex-direction: row;
-        flex-wrap: wrap;
         justify-content: space-around;
         align-items: center;
         margin: 0;

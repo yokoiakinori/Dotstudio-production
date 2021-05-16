@@ -1,13 +1,14 @@
 <template>
     <div>
         <h2 class="pageTitle">通知一覧</h2>
-        <ul class="notification__List">
+        <ul class="notification__List flexColumn">
             <li
                 v-for="notification in notifications"
                 :key="notification.id"
                 :class="{ notification__unchecked: !notification.checked }"
+                class="flexRowSpaceBetween"
             >
-                <div>
+                <div class="flexColumn">
                     <p>{{ notification.message }}</p>
                     <p class="created_at">{{ notification.created_at }}</p>
                 </div>
@@ -61,19 +62,10 @@ export default {
     &__List {
         width: 800px;
         margin: 0 auto;
-        display: flex;
-        flex-flow: column;
         li {
             height: 80px;
             padding: 15px;
             border-top: solid 1px $maincolor;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            div {
-                display: flex;
-                flex-flow: column;
-            }
             button {
                 width: 100px;
                 height: 40px;

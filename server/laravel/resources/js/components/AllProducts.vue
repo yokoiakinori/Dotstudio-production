@@ -1,6 +1,6 @@
 <template>
-    <div class="Home">
-        <div class="productsList" :style="style">
+    <div class="wrapper flexColumnAlignCenter">
+        <div class="productsList flexRowAlignStart" :style="style">
             <Product
                 v-for="product in productList"
                 :key="product.id"
@@ -11,8 +11,8 @@
             />
         </div>
         <Pagination
-            :current-page="currentPage"
-            :last-page="lastPage"
+            :currentPage="currentPage"
+            :lastPage="lastPage"
             :routerPath="routerPath"
         />
     </div>
@@ -45,15 +45,15 @@ export default {
         return {
             maxwidth: 900,
             style: {
-                width: "900px",
-                height: "1500px"
+                width: "900px"
             },
             productList: Array
         };
     },
     computed: {
         productStyle() {
-            const product = `${this.maxwidth / 3}px`;
+            const columnCount = 3;
+            const product = `${this.maxwidth / columnCount}px`;
             return {
                 width: product,
                 height: product
@@ -96,9 +96,10 @@ export default {
                     const message = `あなたの${product.productname}が${this.authName}さんにいいねされました。`;
                     const id = product.user.id;
                     this.inputNotification(message, id); //mixin[notification]参照
+                    const sepalationNumber = 10;
                     if (
-                        product.likes_count % 10 == 0 &&
-                        product.likes_count >= 10
+                        product.likes_count % sepalationNumber == 0 &&
+                        product.likes_count >= sepalationNumber
                     ) {
                         const message = `あなたの${product.productname}が${product.likes_count}回いいねされました。`;
                         const id = product.user.id;
@@ -130,18 +131,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-.Home {
+.wrapper {
     margin: 0 auto;
     margin-top: 0;
-    display: flex;
     width: 100%;
-    align-items: center;
-    flex-flow: column;
 }
 .productsList {
-    margin-top: 30px;
-    display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
+    margin-bottom: 15px;
 }
 </style>

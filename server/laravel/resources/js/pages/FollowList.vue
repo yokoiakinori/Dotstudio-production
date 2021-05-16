@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ul>
+        <ul class="flexColumnAlignCenter">
             <UserListItem
                 v-for="(user, index) in users"
                 :key="user.id"
@@ -86,8 +86,5 @@ export default {
 ul {
     margin: 0;
     padding: 40px 0;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
 }
 </style>

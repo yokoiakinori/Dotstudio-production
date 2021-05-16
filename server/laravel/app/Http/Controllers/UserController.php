@@ -9,6 +9,7 @@ use App\Follower;
 use App\Notification;
 use App\Like;
 use App\Userthumbnail;
+use App\MaterialRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Expr\Cast\String_;
@@ -136,5 +137,11 @@ class UserController extends Controller
     {
         $request->session()->regenerateToken();
         return response()->json();
+    }
+
+    public function requests(String $id)
+    {
+        $material_requests = MaterialRequest::with('user')->where('user_id', $id)->orderBy('created_at', 'desc')->paginate();
+        return $material_requests;
     }
 }

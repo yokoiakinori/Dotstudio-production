@@ -1,12 +1,12 @@
 <template>
-    <div class="userDetail">
-        <div class="userInformation" v-if="appear">
+    <div class="userDetail flexColumnAlignCenter">
+        <div class="userInformation flexRowAlignCenter" v-if="appear">
             <ThumbnailImage :user="user" class="thumbnail infomationItem" />
-            <div class="informationItem columen">
-                <h2 class="username">{{ user.name }}</h2>
+            <div class="informationItem flexColumn">
+                <h2 class="username margin1_bottom">{{ user.name }}</h2>
                 <p class="userintroduction">{{ user.introduction }}</p>
             </div>
-            <div class="informationItem">
+            <div class="informationItem flexRow">
                 <p>
                     <router-link :to="`/follow/${id}`">
                         <span>{{ user.follows.length }}</span
@@ -24,36 +24,28 @@
             </div>
             <router-link
                 :to="`/settings/${id}`"
-                class="settings"
+                class="settings margin2_left"
                 v-if="id == userid"
             >
                 <i class="fas fa-cog"></i>
             </router-link>
         </div>
 
-        <ul class="tab">
-            <li @click="tab = 1">
-                <p
-                    :class="{
-                        'tab_item-active': tab === 1,
-                        'tab_item-nonactive': tab !== 1
-                    }"
-                >
-                    投稿作品
-                </p>
-            </li>
-            <li @click="tab = 2">
-                <p
-                    :class="{
-                        'tab_item-active': tab === 2,
-                        'tab_item-nonactive': tab !== 2
-                    }"
-                >
-                    お気に入り
-                </p>
-            </li>
+        <ul class="tab flexRowSpaceBetween">
+            <UsersContent
+                :contentname="content.name"
+                :isactive="content.name == currentContentName"
+                @currentContent="currentContent(content.name)"
+                v-for="content in contentList"
+                :key="content.name"
+                class="flexRowCenter"
+            />
         </ul>
-        <div class="productsList" :style="style">
+        <div
+            class="flexRowAlignStart"
+            :style="style"
+            v-if="products.length >= 1"
+        >
             <Product
                 v-for="product in products"
                 :key="product.id"
@@ -63,6 +55,15 @@
                 :productstyle="productStyle"
             />
         </div>
+        <div class="flexRowAlignStart" v-else-if="requests.length >= 1">
+            <RequestItem
+                v-for="request in requests"
+                :key="request.id"
+                :request="request"
+                :requeststyle="requestStyle"
+            />
+        </div>
+
         <Pagination :current-page="currentPage" :last-page="lastPage" />
     </div>
 </template>
@@ -71,13 +72,17 @@
 import Pagination from "../components/Pagination.vue";
 import Product from "../components/Products/Product.vue";
 import ThumbnailImage from "../components/ThumbnailImage.vue";
+import UsersContent from "../components/User/UsersContent.vue";
+import RequestItem from "../components/Requests/RequestItem.vue";
 import Axios from "axios";
 import { OK, CREATED, UNPROCESSABLE_ENTITY } from "../util";
 export default {
     components: {
         Pagination,
         Product,
-        ThumbnailImage
+        ThumbnailImage,
+        UsersContent,
+        RequestItem
     },
     props: {
         id: {
@@ -91,21 +96,40 @@ export default {
             lastPage: 0,
             maxwidth: 900,
             products: [],
+            requests: [],
             appear: false,
             style: {
-                width: "900px",
-                height: "1500px"
+                width: "900px"
             },
-            tab: 1,
+            contentList: [
+                {
+                    name: "投稿作品"
+                },
+                {
+                    name: "お気に入り"
+                },
+                {
+                    name: "リクエスト"
+                }
+            ],
+            currentContentName: "投稿作品",
             user: {}
         };
     },
     computed: {
         productStyle() {
-            const product = `${this.maxwidth / 3}px`;
+            const columnCount = 3;
+            const product = `${this.maxwidth / columnCount}px`;
             return {
                 width: product,
                 height: product
+            };
+        },
+        requestStyle() {
+            const columnCount = 5;
+            const request = `${this.maxwidth / columnCount}px`;
+            return {
+                width: request
             };
         },
         userid() {
@@ -123,11 +147,13 @@ export default {
             },
             immediate: true
         },
-        tab: function(val) {
-            if (val == 1) {
+        currentContentName: function(val) {
+            if (val == "投稿作品") {
                 this.showProducts();
-            } else {
+            } else if (val == "お気に入り") {
                 this.showLikeProducts();
+            } else if (val == "リクエスト") {
+                this.showRequests();
             }
         }
     },
@@ -144,48 +170,61 @@ export default {
                 this.like(id);
             }
         },
-        async showProducts() {
+
+        reset() {
             this.products.length = 0;
+            this.requests.length = 0;
+        },
+        errorResponse(val) {
+            if (val.status !== OK) {
+                this.$store.commit("error/setCode", val.status);
+                return false;
+            }
+        },
+        setPageInformation(val) {
+            this.currentPage = val.data.current_page;
+            this.lastPage = val.data.last_page;
+        },
+
+        async showProducts() {
+            this.reset();
             const response = await axios.get(
                 `/api/users/products/${this.id}/?page=${this.page}`
             );
-            if (response.status !== OK) {
-                this.$store.commit("error/setCode", response.status);
-                return false;
-            }
+            this.errorResponse(response);
             this.products = response.data.data;
-            this.currentPage = response.data.current_page;
-            this.lastPage = response.data.last_page;
+            this.setPageInformation(response);
         },
+
         async showLikeProducts() {
-            this.products.length = 0;
+            this.reset();
             const response = await axios.get(
                 `/api/users/likeproducts/${this.id}/?page=${this.page}`
             );
-            if (response.status !== OK) {
-                this.$store.commit("error/setCode", response.status);
-                return false;
-            }
+            this.errorResponse(response);
             this.products = response.data.data;
-            this.currentPage = response.data.current_page;
-            this.lastPage = response.data.last_page;
+            this.setPageInformation(response);
         },
+
+        async showRequests() {
+            this.reset();
+            const response = await axios.get(
+                `/api/user/${this.id}/requests/?page=${this.page}`
+            );
+            this.errorResponse(response);
+            this.requests = response.data.data;
+            this.setPageInformation(response);
+        },
+
         async showUser() {
             const response = await axios.get(`/api/users/${this.id}`);
-            if (response.status !== OK) {
-                this.$store.commit("error/setCode", response.status);
-                return false;
-            }
+            this.errorResponse(response);
             this.user = response.data[0];
         },
+
         async like(id) {
             const response = await axios.put(`/api/products/${id}/like`);
-
-            if (response.status !== OK) {
-                this.$store.commit("error/setCode", response.status);
-                return false;
-            }
-
+            this.errorResponse(response);
             this.products = this.products.map(product => {
                 if (product.id == response.data.product_id) {
                     product.likes_count += 1;
@@ -194,14 +233,10 @@ export default {
                 return product;
             });
         },
+
         async unlike(id) {
             const response = await axios.delete(`/api/products/${id}/like`);
-
-            if (response.status !== OK) {
-                this.$store.commit("error/setCode", response.status);
-                return false;
-            }
-
+            this.errorResponse(response);
             this.products = this.products.map(product => {
                 if (product.id == response.data.product_id) {
                     product.likes_count -= 1;
@@ -209,6 +244,10 @@ export default {
                 }
                 return product;
             });
+        },
+
+        currentContent(val) {
+            this.currentContentName = val;
         }
     }
 };
@@ -220,23 +259,17 @@ export default {
     padding-top: 30px;
     margin: 0 auto;
     margin-top: 0;
-    display: flex;
-    flex-flow: column;
     width: 100%;
-    align-items: center;
 }
 .userInformation {
     width: 850px;
-    display: flex;
-    align-items: center;
 }
 .informationItem {
     border-right: solid 1px $maincolor;
-    display: flex;
     padding: 0 15px;
     p {
         text-align: center;
-        margin: 0 10px;
+        @extend .margin1_side;
     }
     span {
         font-weight: bold;
@@ -248,53 +281,27 @@ export default {
         color: rgba($color: $maincolor, $alpha: 0.6);
     }
 }
-.columen {
-    flex-flow: column;
-}
-h2 {
-    margin-bottom: 10px;
-}
 .settings {
-    margin-left: 20px;
     font-size: 20px;
-}
-.productsList {
-    display: flex;
-    flex-flow: row wrap;
-    align-content: flex-start;
 }
 .thumbnail {
     width: 130px;
     height: 130px;
 }
 .tab {
-    width: 25%;
+    width: 40%;
     height: 85px;
     margin: 0;
     padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     text-align: center;
     li {
         font-size: 18px;
-        width: 50%;
+        width: 30%;
         height: 65%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         p {
             display: inline-block;
             margin: 0;
         }
     }
-}
-.tab_item-nonactive {
-    transition-duration: 0.4s;
-    border-bottom: solid 1.2px rgba($maincolor, 0);
-}
-.tab_item-active {
-    transition-duration: 0.4s;
-    border-bottom: solid 1.2px $maincolor;
 }
 </style>

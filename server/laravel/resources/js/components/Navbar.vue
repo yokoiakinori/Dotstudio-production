@@ -15,35 +15,49 @@
                 </button>
             </form>
             <div class="navbar__item">
+                <RouterLink to="/requests?page=1">
+                    <i class="fas fa-comment-alt"></i>
+                    リクエスト
+                </RouterLink>
+            </div>
+            <div class="navbar__item">
                 <RouterLink :to="{ name: 'rank-users', query: { page: 1 } }">
                     <i class="fas fa-crown"></i>
                     ランキング
                 </RouterLink>
             </div>
-            <div v-if="isLogin" class="navbar__item">
-                <RouterLink class="button" to="/drawing?page=1">
-                    <i class="fas fa-paint-brush"></i>
-                    投稿する
+            <div v-if="isLogin" class="navbar__menu">
+                <div v-if="isLogin" class="navbar__item">
+                    <RouterLink class="button" to="/drawing?page=1">
+                        <i class="fas fa-paint-brush"></i>
+                        投稿する
+                    </RouterLink>
+                </div>
+                <div v-if="isLogin" class="navbar__item">
+                    <RouterLink class="circlebutton" to="/notification">
+                        <i class="fas fa-bell"></i>
+                    </RouterLink>
+                </div>
+                <RouterLink
+                    v-if="isLogin"
+                    :to="`/users/${id}`"
+                    class="thumbnail__link"
+                >
+                    <img
+                        :src="thumbnail"
+                        :alt="`${name}のサムネイル`"
+                        class="thumbnail"
+                    />
                 </RouterLink>
             </div>
-            <div v-if="isLogin" class="navbar__item">
-                <RouterLink class="circlebutton" to="/notification">
-                    <i class="fas fa-bell"></i>
-                </RouterLink>
-            </div>
-            <RouterLink
-                v-if="isLogin"
-                :to="`/users/${id}`"
-                class="thumbnail__link"
-            >
-                <img
-                    :src="thumbnail"
-                    :alt="`${name}のサムネイル`"
-                    class="thumbnail"
-                />
-            </RouterLink>
-            <div v-else class="navbar__item">
-                <RouterLink class="button--link" to="/login">
+
+            <div v-else class="navbar__menu">
+                <div class="navbar__item">
+                    <button class="button" @click="guestLogin()">
+                        ゲストログイン
+                    </button>
+                </div>
+                <RouterLink class="navbar__item" to="/login">
                     Login / Register
                 </RouterLink>
             </div>
@@ -78,6 +92,14 @@ export default {
                 this.$store.commit("search/setKeyword", this.searchText);
                 this.$router.push("/search");
             }
+        },
+        async guestLogin() {
+            const guestCredential = {
+                email: "guest@example",
+                password: "dotstudioGUEST"
+            };
+            await this.$store.dispatch("auth/login", guestCredential);
+            this.$router.push("/");
         }
     }
 };

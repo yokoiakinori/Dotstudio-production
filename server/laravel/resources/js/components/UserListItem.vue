@@ -1,7 +1,7 @@
 <template>
-    <li>
+    <li class="userListItem flexRowSpaceBetween">
         <ThumbnailImage :user="user" class="thumbnail" />
-        <div class="userInformation">
+        <div class="userInformation flexColumnAlignStart">
             <router-link :to="`/users/${user.id}`"
                 ><h1>{{ user.name }}</h1></router-link
             >
@@ -10,19 +10,20 @@
                 <button
                     @click="follow(user.id)"
                     v-show="!followees.includes(user.id)"
+                    class="margin1_top"
                 >
                     フォローする
                 </button>
                 <button
                     @click="unfollow(user.id)"
                     v-show="followees.includes(user.id)"
-                    class="unfollow"
+                    class="unfollow margin1_top"
                 >
                     フォロー解除
                 </button>
             </div>
         </div>
-        <div class="productsList">
+        <div class="productsList flexRowAlignCenter">
             <Product
                 v-for="product in products"
                 :key="product.id"
@@ -111,18 +112,14 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-li {
+.userListItem {
     width: 810px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 30px;
     &:first-child {
         margin-top: 0;
     }
 }
 button {
-    margin-top: 10px;
     transition-duration: 0.3s;
     border: solid 1px $maincolor;
     padding: 5px 15px;
@@ -140,16 +137,10 @@ button {
 .userInformation {
     margin-left: 3%;
     width: 230px;
-    display: flex;
-    flex-flow: column;
     padding: 10px 0;
-    align-items: flex-start;
 }
 .productsList {
     width: 400px;
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
 }
 .unfollow {
     border: solid 1px rgba($maincolor, 0.5);

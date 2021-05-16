@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="flexRow">
         <ThumbnailImage :user="comment.user" class="thumbnail" />
-        <div class="content">
+        <div class="content flexColumn">
             <p class="name">{{ comment.user.name }}</p>
             <p>{{ comment.content }}</p>
         </div>
@@ -23,17 +23,12 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../sass/common.scss";
-div {
-    display: flex;
-}
 .thumbnail {
     width: 70px;
     height: 70px;
     margin-right: 20px;
 }
 .content {
-    display: flex;
-    flex-flow: column;
     width: 240px;
 }
 .name {

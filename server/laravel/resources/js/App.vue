@@ -4,7 +4,7 @@
             <Navbar />
         </header>
         <main>
-            <div class="container">
+            <div class="topContainer">
                 <Loading v-show="loading" />
                 <RouterView v-show="!loading" />
             </div>
@@ -55,8 +55,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "../sass/common.scss";
-.container {
+.topContainer {
     background-color: rgba($color: $maincolor, $alpha: 0.1);
     padding: 30px;
+    width: 100vw;
 }
 </style>
