@@ -15,7 +15,7 @@ class Product extends Model
     use Searchable;
     public function searchableAs()
     {
-        return 'products_nginx';
+        return 'products_production';
     }
     protected $guarded = array(
         'id',
