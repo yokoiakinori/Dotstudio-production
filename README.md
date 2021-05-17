@@ -25,6 +25,7 @@
 ## スクリーンショット
 ### 会員登録・ログイン
 <img width="1276" alt="スクリーンショット 2021-05-17 23 03 26" src="https://user-images.githubusercontent.com/26515575/118502317-8d4a4700-b764-11eb-9050-ea12ecce75cf.png">
+
 ### ドット絵エディター
 <img width="1145" alt="スクリーンショット 2021-05-17 23 23 05" src="https://user-images.githubusercontent.com/26515575/118504984-f632be80-b766-11eb-9cf6-422394b07630.png">
 
