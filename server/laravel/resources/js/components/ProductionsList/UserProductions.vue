@@ -12,7 +12,9 @@
                     >1列に配置するドット数（合計：{{ alldot }}ドット）</label
                 >
                 <input type="number" v-model="linedot" />
-                <label for="tags">タグ（カテゴリー、イメージ）</label>
+                <label for="tags"
+                    >タグ（カテゴリー、イメージ）※必須ではありません</label
+                >
                 <input type="text" v-model="producttagstring" />
                 <ul class="tagList flexRowStart">
                     <li v-for="(productTag, index) in productTags" :key="index">
@@ -83,7 +85,7 @@ export default {
             currentPage: 0,
             lastPage: 0,
             currentProduct: String,
-            linedot: 0,
+            linedot: 10,
             modalWindowCheck: false,
             productionList: [],
             productname: "",
