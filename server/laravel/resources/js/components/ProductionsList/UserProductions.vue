@@ -192,7 +192,7 @@ export default {
             }
         },
         async reset() {
-            this.linedot = 0;
+            this.linedot = 10;
             this.productname = null;
             this.productTags.splice(0, this.productTags.length);
             this.producttagstring = "";
