@@ -10,7 +10,7 @@
                 <li
                     v-for="tag in product.producttags"
                     :key="tag.id"
-                    class="flexRowAlignCenter"
+                    class="flexRowAlignCenter margin2_right"
                 >
                     <RouterLink to="/tagsearch?page=1">
                         <ProductTag :message="tag.message"></ProductTag>
