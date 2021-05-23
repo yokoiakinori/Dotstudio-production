@@ -9,7 +9,9 @@
                 <label for="productname">作品名</label>
                 <input type="text" v-model="productname" />
                 <label for="linedot"
-                    >1列に配置するドット数（合計：{{ alldot }}ドット）</label
+                    >1列に配置するドット数（合計：{{
+                        alldot
+                    }}ドット）※100ドット〜1600ドットまで</label
                 >
                 <input type="number" v-model="linedot" />
                 <label for="tags"
@@ -85,7 +87,7 @@ export default {
             currentPage: 0,
             lastPage: 0,
             currentProduct: String,
-            linedot: 10,
+            linedot: 0,
             modalWindowCheck: false,
             productionList: [],
             productname: "",
@@ -192,7 +194,7 @@ export default {
             }
         },
         async reset() {
-            this.linedot = 10;
+            this.linedot = 0;
             this.productname = null;
             this.productTags.splice(0, this.productTags.length);
             this.producttagstring = "";
