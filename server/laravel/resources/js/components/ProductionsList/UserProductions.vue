@@ -168,6 +168,8 @@ export default {
         modalToggle() {
             this.reset();
             this.modalWindowCheck = !this.modalWindowCheck;
+            const defaultValue = 10;
+            this.linedot = defaultValue;
         },
         productSave() {
             this.$store.commit("maincanvas/productSave");
