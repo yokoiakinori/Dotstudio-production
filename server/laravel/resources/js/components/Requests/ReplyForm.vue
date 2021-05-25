@@ -23,7 +23,7 @@
                 @formEnter="currentProduct"
             >
                 <h2>プロダクト一覧</h2>
-                <ul class="margin2_vertical">
+                <ul class="margin2_vertical flexRow">
                     <li
                         v-for="(product, index) in products"
                         :key="index"
