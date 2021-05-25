@@ -11,7 +11,7 @@
                 <label for="linedot"
                     >1列に配置するドット数（合計：{{
                         alldot
-                    }}ドット）※100ドット〜1600ドットまで</label
+                    }}ドット）<br />※100ドット〜1600ドットまで</label
                 >
                 <input type="number" v-model="linedot" />
                 <label for="tags"
