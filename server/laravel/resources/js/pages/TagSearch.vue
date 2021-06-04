@@ -65,7 +65,6 @@ export default {
                 return false;
             }
             this.products = response.data.data;
-            console.log(this.products);
             this.currentPage = response.data.current_page;
             this.lastPage = response.data.last_page;
         }

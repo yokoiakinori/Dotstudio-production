@@ -152,7 +152,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = Product::search($request->keyword)->paginate();
+        $products = Product::search($request->keyword)->with('user', 'likes', 'producttags')->paginate();
         return $products;
     }
 
@@ -161,7 +161,7 @@ class ProductController extends Controller
         $tag = $request->tag;
         $products = Product::whereIn('id', function ($query) use ($tag) {
             $query->from('producttags')->select('producttags.product_id')->where('producttags.message', $tag);
-        })->paginate();
+        })->with('user', 'likes', 'producttags')->paginate();
         return $products;
     }
 
