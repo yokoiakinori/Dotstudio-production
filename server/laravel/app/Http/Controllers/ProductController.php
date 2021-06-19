@@ -81,7 +81,8 @@ class ProductController extends Controller
     public function list()
     {
         $userid = Auth::id();
-        $list = Product::where('user_id', $userid)->orderBy('created_at', 'asc')->paginate(3);
+        $listMaximumValue = 3;
+        $list = Product::where('user_id', $userid)->orderBy('created_at', 'asc')->paginate($listMaximumValue);
         return response($list, 200);
     }
 
