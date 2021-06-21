@@ -129,7 +129,7 @@ class ProductController extends Controller
         return response($new_comment, 201);
     }
 
-    public function likepreparation(string $id, bool $isLike)
+    public function likeunlike(string $id, bool $isLike)
     {
         $product = Product::where('id', $id)->with('likes')->first();
         if (!$product) {
@@ -145,12 +145,12 @@ class ProductController extends Controller
 
     public function like(string $id)
     {
-        return $this->likepreparation($id, True);
+        return $this->likeunlike($id, True);
     }
 
     public function unlike(string $id)
     {
-        return $this->likepreparation($id, False);
+        return $this->likeunlike($id, False);
     }
 
     public function search(Request $request)
