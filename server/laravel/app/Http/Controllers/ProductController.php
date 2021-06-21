@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\PseudoTypes\True_;
+use phpDocumentor\Reflection\Types\Boolean;
 use PhpParser\Node\Expr\Cast\String_;
 
 class ProductController extends Controller
@@ -127,7 +129,7 @@ class ProductController extends Controller
         return response($new_comment, 201);
     }
 
-    public function like(string $id)
+    public function likepreparation(string $id, bool $isLike)
     {
         $product = Product::where('id', $id)->with('likes')->first();
         if (!$product) {
@@ -135,20 +137,20 @@ class ProductController extends Controller
         }
 
         $product->likes()->detach(Auth::user()->id);
-        $product->likes()->attach(Auth::user()->id);
+        if ($isLike) {
+            $product->likes()->attach(Auth::user()->id);
+        }
         return ["product_id" => $id];
+    }
+
+    public function like(string $id)
+    {
+        return $this->likepreparation($id, True);
     }
 
     public function unlike(string $id)
     {
-        $product = Product::where('id', $id)->with('likes')->first();
-
-        if (!$product) {
-            abort(404);
-        }
-
-        $product->likes()->detach(Auth::user()->id);
-        return ["product_id" => $id];
+        return $this->likepreparation($id, False);
     }
 
     public function search(Request $request)
@@ -166,16 +168,19 @@ class ProductController extends Controller
         return $products;
     }
 
+    public function ordereachrank()
+    {
+        return Product::with('user', 'likes', 'producttags');
+    }
+
     public function likedrank()
     {
-        $products = Product::with('user', 'likes', 'producttags')->withCount('likes')->orderBy('likes_count', 'desc')->paginate();
-        return $products;
+        return $this->ordereachrank()->withCount('likes')->orderBy('likes_count', 'desc')->paginate();
     }
 
     public function watchedrank()
     {
-        $products = Product::with('user', 'likes', 'producttags')->orderBy('countview', 'desc')->paginate();
-        return $products;
+        return $this->ordereachrank()->orderBy('countview', 'desc')->paginate();
     }
 
     public function materialadd(string $id)
