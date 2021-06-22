@@ -17,4 +17,6 @@ mix.webpackConfig({
             ? "prod/chunks/[name].js"
             : "dev/chunks/[name].js"
     }
-}).js("resources/js/app.js", "public/js");
+})
+    .js("resources/js/app.js", "public/js")
+    .sass("resources/sass/common.scss", "public/css");
