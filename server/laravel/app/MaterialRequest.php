@@ -8,10 +8,9 @@ use Carbon\Carbon;
 
 class MaterialRequest extends Model
 {
-    protected $guarded = array(
-        'id',
-        'user_id'
-    );
+    protected $fillable = [
+        'title', 'contents'
+    ];
 
     protected $visible = [
         'id', 'created_at', 'title', 'contents', 'iscompleted', 'user_id', 'user', 'requestreplies'

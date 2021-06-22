@@ -21,9 +21,7 @@ class MaterialRequestController extends Controller
     {
         $material_request = new MaterialRequest();
         $material_request->user_id = Auth::id();
-        $material_request->title = $request->title;
-        $material_request->contents = $request->contents;
-        $material_request->save();
+        $material_request->fill($request->all())->save();
         return $material_request;
     }
 
