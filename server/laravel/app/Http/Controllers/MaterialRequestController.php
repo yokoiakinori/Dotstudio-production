@@ -29,20 +29,14 @@ class MaterialRequestController extends Controller
     {
         $currentid = $request->id;
         $material_request = MaterialRequest::with('user')->where('id', $currentid)->first();
-        $material_request->title = $request->title;
-        $material_request->contents = $request->contents;
-        $material_request->save();
+        $material_request->fill($request->all())->save();
     }
 
     public function reply(Request $request)
     {
         $request_reply = new RequestReply();
         $request_reply->author_id = Auth::id();
-        $request_reply->opponent_id = $request->opponent_id;
-        $request_reply->request_id = $request->request_id;
-        $request_reply->product_id = $request->product_id;
-        $request_reply->comment = $request->comment;
-        $request_reply->save();
+        $request_reply->fill($request->all())->save();
         return $request_reply;
     }
 

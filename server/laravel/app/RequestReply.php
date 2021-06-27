@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class RequestReply extends Model
 {
-    protected $guarded = array(
-        'id',
-        'user_id'
-    );
+    protected $fillable = [
+        'opponent_id', 'request_id', 'product_id', 'comment'
+    ];
 
     protected $visible = [
         'id', 'opponent_id', 'author_id', 'request_id', 'product_id', 'comment', 'product'
