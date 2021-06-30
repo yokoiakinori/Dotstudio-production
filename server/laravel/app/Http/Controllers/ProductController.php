@@ -32,11 +32,7 @@ class ProductController extends Controller
         $product = DB::transaction(function () use ($request) {
             $product = new Product();
             $product->user_id = Auth::id();
-            $product->productname = $request->productname;
-            $product->linedot = $request->linedot;
-            $product->alldot = $request->alldot;
-            $product->uniquekey = $request->uniquekey;
-            $product->ispublished = $request->ispublished;
+            $product->fill($request->productAttributes());
             $product->colors = str_repeat("0_", $request->alldot);
             $product->save();
 

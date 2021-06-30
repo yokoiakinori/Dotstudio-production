@@ -32,11 +32,18 @@ class ProductCreate extends FormRequest
 
     public function messages()
     {
-        return[
+        return [
             'productname.required' => '作品名を入力してください。',
             'linedot.required' => 'ドット数を入力してください。',
             'linedot.numeric' => 'ドット数は整数で入力してください。',
             'linedot.between:10,40' => '1列に配置できるドット数は10個〜40個までです。'
         ];
+    }
+
+    public function productAttributes()
+    {
+        return $this->only(
+            ['productname', 'alldot', 'linedot', 'uniquekey', 'ispublished']
+        );
     }
 }
