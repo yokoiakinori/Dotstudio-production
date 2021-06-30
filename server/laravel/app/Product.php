@@ -17,10 +17,9 @@ class Product extends Model
     {
         return 'products_production';
     }
-    protected $guarded = array(
-        'id',
-        'user_id'
-    );
+    protected $fillable = [
+        'user', 'productname', 'alldot', 'linedot', 'colors', 'uniquekey', 'comments', 'likes_count', 'liked_by_user', 'producttags', 'usedmaterial', 'ispublished', 'countview', 'requestreply'
+    ];
 
     protected $appends = [
         'likes_count', 'liked_by_user',
